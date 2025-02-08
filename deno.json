@@ -1,0 +1,24 @@
+{
+  "imports": {
+    "@std/cli": "jsr:@std/cli@^1.0.12",
+    "@types/react": "npm:@types/react@^18.2.0",
+    "fullscreen-ink": "npm:fullscreen-ink@^0.0.2",
+    "ink": "npm:ink@^5.1.0",
+    "ink-big-text": "npm:ink-big-text@^2.0.0",
+    "ink-gradient": "npm:ink-gradient@^3.0.0",
+    "ink-text-input": "npm:ink-text-input@^6.0.0",
+    "react": "npm:react@^18.2.0"
+  },
+  "compilerOptions": {
+    "types": [
+      "npm:react",
+      "npm:@types/react"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react"
+  },
+  "unstable": [
+    "kv"
+  ]
+}
