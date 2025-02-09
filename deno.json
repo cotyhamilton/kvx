@@ -1,7 +1,13 @@
 {
   "tasks": {
-    "dev": "deno run -A --watch-hmr --no-clear-screen src/main.ts",
-    "dev-install": "deno install -REN --global --name kvx --config deno.json src/main.ts -f"
+    "dev": {
+      "description": "Run the dev script with hmr",
+      "command": "deno run -A --watch-hmr --no-clear-screen dev.ts 2>/dev/null"
+    },
+    "dev-install": {
+      "description": "Installs kvx globally for testing",
+      "command": "deno install -REN --global --name kvx --config deno.json src/main.ts -f"
+    }
   },
   "imports": {
     "@std/cli": "jsr:@std/cli@^1.0.12",

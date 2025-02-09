@@ -20,15 +20,18 @@ const getKeys = async (kv: Deno.Kv) => {
 type Props = {
   kv: Deno.Kv;
   url: string;
+  forceUpdateEvent?: EventTarget;
 };
 
-export function App({ kv, url }: Props) {
+export function App({ kv, url, forceUpdateEvent }: Props) {
   const { exit } = useApp();
   const [keys, setKeys] = useState<Deno.KvEntry<unknown>[]>([]);
   const [hoverIndex, setHoverIndex] = useState(0);
   const [commandMode, setCommandMode] = useState(false);
   const [command, setCommand] = useState("");
   const [view, setView] = useState<"list" | "detail">("list");
+  // for handling rerender
+  const [_, setUpdate] = useState(0);
 
   useInput((input, key) => {
     if (input === ":") {
@@ -46,6 +49,19 @@ export function App({ kv, url }: Props) {
   useEffect(() => {
     refreshKeys();
   }, []);
+
+  useEffect(() => {
+    if (!forceUpdateEvent) return;
+
+    // forces rerenders on hmr event
+    const handleForceUpdate = () => {
+      setUpdate((prev) => prev + 1);
+    };
+    forceUpdateEvent.addEventListener("force-update", handleForceUpdate);
+    return () => {
+      forceUpdateEvent.removeEventListener("force-update", handleForceUpdate);
+    };
+  }, [forceUpdateEvent]);
 
   useEffect(() => {
     if (keys.length && hoverIndex >= keys.length) {
