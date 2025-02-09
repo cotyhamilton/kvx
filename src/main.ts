@@ -1,6 +1,6 @@
-// @ts-types="@types/react"
 import { parseArgs } from "@std/cli";
 import { withFullScreen } from "fullscreen-ink";
+// @ts-types="@types/react"
 import React from "react";
 import { App } from "./app.tsx";
 

@@ -1,6 +1,6 @@
-// @ts-types="@types/react"
 import { Box, Text, useApp, useInput } from "ink";
 import TextInput from "ink-text-input";
+// @ts-types="@types/react"
 import { useEffect, useState } from "react";
 import { DetailView } from "./detail-view.tsx";
 import { Header } from "./header.tsx";
