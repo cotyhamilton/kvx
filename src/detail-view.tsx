@@ -30,9 +30,10 @@ const DetailView = ({ data, onBack }: DetailViewProps) => {
         </Text>
       </Box>
       <Box flexDirection="column" flexGrow={1} paddingLeft={1} paddingRight={1}>
-        <Text>{data.key.toString()}</Text>
-        <Text>{data.versionstamp.toString()}</Text>
-        <Text>{JSON.stringify(data.value, null, 2)}</Text>
+        {/* todo: why is this rendering when empty db */}
+        <Text>{data?.key?.toString()}</Text>
+        <Text>{data?.versionstamp?.toString()}</Text>
+        <Text>{JSON.stringify(data?.value, null, 2)}</Text>
       </Box>
     </Box>
   );
