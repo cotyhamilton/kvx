@@ -9,6 +9,6 @@ if (import.meta.main) {
     string: ["url"],
   });
   const kv = await Deno.openKv(url);
-  withFullScreen(React.createElement(App, { kv, url: "kvx-playground" }))
+  withFullScreen(React.createElement(App, { kv, url: url ?? "kvx-playground" }))
     .start();
 }

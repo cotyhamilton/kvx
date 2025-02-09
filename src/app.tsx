@@ -30,41 +30,12 @@ export function App({ kv, url }: Props) {
   const [command, setCommand] = useState("");
   const [view, setView] = useState<"list" | "detail">("list");
 
-  useInput(async (input, key) => {
-    if (!commandMode) {
-      if (view === "list") {
-        if (input === "j" || key.downArrow) {
-          if (hoverIndex < keys.length - 1) {
-            setHoverIndex((prev) => prev + 1);
-          }
-        }
-        if (input === "k" || key.upArrow) {
-          if (hoverIndex > 0) {
-            setHoverIndex((prev) => prev - 1);
-          }
-        }
-        if (input === "d") {
-          const key = keys[hoverIndex].key;
-          await kv.delete(key);
-          await refreshKeys();
-        }
-        if (key.return) {
-          setView("detail");
-        }
-      }
-      if (view === "detail") {
-        if (key.escape) {
-          setView("list");
-        }
-      }
-      if (input === ":") {
-        setCommandMode(true);
-      }
-    } else {
-      if (key.escape) {
-        setCommand("");
-        setCommandMode(false);
-      }
+  useInput((input, key) => {
+    if (input === ":") {
+      setCommandMode(true);
+    } else if (commandMode && key.escape) {
+      setCommand("");
+      setCommandMode(false);
     }
   });
 
@@ -92,7 +63,12 @@ export function App({ kv, url }: Props) {
 
   return (
     <Box flexDirection="column" width="100%">
-      <Header url={url} />
+      <Header
+        url={url}
+        navigation={view === "list"
+          ? <ListView.Navigation />
+          : <DetailView.Navigation />}
+      />
       {commandMode && (
         <Box borderStyle="round" borderColor="cyanBright" paddingLeft={1}>
           <Text>:</Text>
@@ -118,8 +94,24 @@ export function App({ kv, url }: Props) {
           <Text color="cyanBright" bold>{`] `}</Text>
         </Box>
 
-        {view === "list" && <ListView keys={keys} hoverIndex={hoverIndex} />}
-        {view === "detail" && <DetailView data={keys[hoverIndex]} />}
+        {view === "list" && (
+          <ListView
+            keys={keys}
+            hoverIndex={hoverIndex}
+            onHoverChange={setHoverIndex}
+            onDelete={async (key) => {
+              await kv.delete(key);
+              await refreshKeys();
+            }}
+            onSelect={() => setView("detail")}
+          />
+        )}
+        {view === "detail" && (
+          <DetailView
+            data={keys[hoverIndex]}
+            onBack={() => setView("list")}
+          />
+        )}
       </Box>
     </Box>
   );

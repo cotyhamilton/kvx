@@ -1,8 +1,50 @@
-import { Box, Text } from "ink";
+import { Box, Text, useInput } from "ink";
 
-export const ListView = (
-  { keys, hoverIndex }: { keys: Deno.KvEntry<unknown>[]; hoverIndex: number },
-) => {
+export const ListNavigation = () => {
+  return (
+    <Box flexDirection="column">
+      <Box>
+        <Text bold color="blue">{`<d> `}</Text>
+        <Text dimColor>Delete</Text>
+      </Box>
+    </Box>
+  );
+};
+
+type ListViewProps = {
+  keys: Deno.KvEntry<unknown>[];
+  hoverIndex: number;
+  onHoverChange: (index: number) => void;
+  onDelete: (key: Deno.KvKey) => void;
+  onSelect: () => void;
+};
+
+const ListView = ({
+  keys,
+  hoverIndex,
+  onHoverChange,
+  onDelete,
+  onSelect,
+}: ListViewProps) => {
+  useInput((input, key) => {
+    if (input === "j" || key.downArrow) {
+      if (hoverIndex < keys.length - 1) {
+        onHoverChange(hoverIndex + 1);
+      }
+    }
+    if (input === "k" || key.upArrow) {
+      if (hoverIndex > 0) {
+        onHoverChange(hoverIndex - 1);
+      }
+    }
+    if (input === "d") {
+      onDelete(keys[hoverIndex].key);
+    }
+    if (key.return) {
+      onSelect();
+    }
+  });
+
   return (
     <Box paddingLeft={1} paddingRight={1} flexDirection="column">
       <Box>
@@ -54,3 +96,6 @@ export const ListView = (
     </Box>
   );
 };
+
+export { ListView };
+ListView.Navigation = ListNavigation;
