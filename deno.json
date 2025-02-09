@@ -1,4 +1,7 @@
 {
+  "tasks": {
+    "dev": "deno run -A --watch-hmr --no-clear-screen src/main.ts"
+  },
   "imports": {
     "@std/cli": "jsr:@std/cli@^1.0.12",
     "@types/react": "npm:@types/react@^18.2.0",

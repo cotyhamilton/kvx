@@ -9,6 +9,26 @@ if (import.meta.main) {
     string: ["url"],
   });
   const kv = await Deno.openKv(url);
-  withFullScreen(React.createElement(App, { kv, url: url ?? "kvx-playground" }))
-    .start();
+
+  const app = withFullScreen(
+    React.createElement(App, { kv, url: url ?? "kvx-playground" }),
+  );
+
+  await app.start();
+
+  const cleanup = async () => {
+    await app.waitUntilExit();
+    kv.close();
+    Deno.exit(0);
+  };
+
+  addEventListener("unload", () => {
+    cleanup();
+  });
+
+  ["SIGINT", "SIGTERM", "SIGQUIT"].forEach((signal) => {
+    Deno.addSignalListener(signal as Deno.Signal, () => {
+      cleanup();
+    });
+  });
 }
